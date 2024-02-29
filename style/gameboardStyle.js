@@ -11,10 +11,9 @@ const gameboardStyle = StyleSheet.create({
   },
   textGameboard: {
     color: "white",
-    fontsize: 25,
     padding: 5,
     textAlign: "center",
-    fontFamily: "Verdana",
+    fontFamily: "Roboto",
   },
   gameboardButton: {
     margin: windowWidth * 0.03,
@@ -31,7 +30,7 @@ const gameboardStyle = StyleSheet.create({
     fontSize: 15,
     color: "white",
     fontWeight: "bold",
-    fontFamily: "Gill Sans",
+    fontFamily: "Roboto",
   },
   nbrSum: {
     color: "white",
@@ -39,6 +38,7 @@ const gameboardStyle = StyleSheet.create({
     textAlign: "center",
     paddingTop: 20,
     paddingBottom: 3,
+    fontFamily: "Roboto",
   },
 });
 

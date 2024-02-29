@@ -6,28 +6,33 @@ const scoreboardStyle = StyleSheet.create({
   //Scoreboard
   scoreboardHeader: {
     textAlign: "center",
-    fontSize: 17,
     fontWeight: "bold",
     paddingBottom: 25,
     color: "white",
-    fontFamily: "Verdana",
+    fontFamily: "Roboto",
   },
   clearButton: {
     margin: windowWidth * 0.03,
     padding: 10,
+    marginTop: 30,
     backgroundColor: "purple",
-    width: windowWidth * 0.5,
+    width: windowWidth * 0.45,
     borderRadius: 15,
     alignItems: "center",
   },
   clearButtonText: {
-    fontSize: 15,
     color: "white",
     fontWeight: "bold",
-    fontFamily: "Gill Sans",
+    fontFamily: "Roboto",
   },
   headerScoreboard: {
-    backgroundColor: "#ffffff", // Header background color
+    backgroundColor: "#bab8b8",
+  },
+  textScoreboard: {
+    color: "white",
+    paddingBottom: 10,
+    textAlign: "center",
+    fontFamily: "Roboto",
   },
 });
 

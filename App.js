@@ -1,9 +1,11 @@
 import { StatusBar } from "expo-status-bar";
 import { View, useWindowDimensions } from "react-native";
-import { useState } from "react";
+import React, { useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
+import "react-native-gesture-handler";
 import Gameboard from "./components/Gameboard";
 import Scoreboard from "./components/Scoreboard";
 import Home from "./components/Home";
@@ -18,7 +20,7 @@ const BONUS_POINTS = 50;
 
 const Tab = createBottomTabNavigator();
 
-export default function App() {
+export default function App({}) {
   const [name, setName] = useState("");
 
   const windowWidth = useWindowDimensions().width;
@@ -27,11 +29,11 @@ export default function App() {
   // Adjust icon size based on screen width
   let iconSize;
   if (windowWidth > 600 && windowHeight > 600) {
-    // Large screen, such as iPad
-    iconSize = 25; // Adjust the size as needed
+    // Large screen (iPad)
+    iconSize = 25;
   } else {
-    // Small screen, such as phones
-    iconSize = 20; // Default size fo
+    // Small screen (Phone)
+    iconSize = 20;
   }
 
   return (
@@ -62,19 +64,20 @@ export default function App() {
               return <Ionicons name={iconName} size={iconSize} color={color} />;
             },
 
+            display: "flex",
+
             tabBarActiveTintColor: "purple",
             tabBarInactiveTintColor: "white",
           })}
-          tabBarOptions={{
-            style: {
-              marginLeft: 5,
-              marginRight: 5,
-              flexDirection: "column",
-              alignSelf: "center",
-            },
-          }}
         >
-          <Tab.Screen name="Home" options={{ headerTintColor: "white" }}>
+          <Tab.Screen
+            name="Home"
+            options={{
+              tabBarStyle: { display: "none" },
+              headerTintColor: "white",
+              // alignSelf: "center" for Android?
+            }}
+          >
             {(props) => (
               <Home
                 {...props}

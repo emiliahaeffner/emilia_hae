@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
 import {
   Text,
-  ScrollView,
   View,
   Pressable,
   TextInput,
   Dimensions,
+  Platform,
 } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { KeyboardAvoidingView } from "react-native";
 import styles from "../style/generalStyle";
 import Header from "./Header";
 import Footer from "./Footer";
@@ -29,21 +30,20 @@ const Home = ({
 
   let iconSize;
   if (windowWidth > 600 && windowHeight > 600) {
-    // Large screen, such as iPad
-    iconSize = 70; // Adjust the size as needed
+    // Large screen (iPad)
+    iconSize = 70;
   } else {
-    // Small screen, such as phones
-    iconSize = 50; // Default size for small screens
+    // Small screen (Phone)
+    iconSize = 50;
   }
 
-  const fontSize = windowWidth < 600 ? 11 : 16;
+  const fontSize = windowWidth < 600 ? 12 : 18;
   const headerSize = windowWidth < 600 ? 20 : 30;
+  const buttonSize = windowWidth < 600 ? 14 : 18;
 
   const [buttonPressed, setButtonPressed] = useState(false);
 
   useEffect(() => {
-    // Focus on the text input when the component mounts
-
     if (textInputRef.current) {
       textInputRef.current.focus();
     }
@@ -51,7 +51,6 @@ const Home = ({
 
   const textInputRef = React.createRef();
 
-  // activate button and check if something was entered into textInputField --> if empty: alarm
   const showRules = () => {
     if (!name.trim()) {
       alert("Name entry is empty");
@@ -60,7 +59,6 @@ const Home = ({
     }
   };
 
-  // rules of the game - const are in the App.js
   const rules = () => {
     return (
       <View>
@@ -96,10 +94,10 @@ const Home = ({
             Good luck, {name}
           </Text>
           <Pressable
-            style={[homeStyle.homeButton, { padding: fontSize }]}
+            style={[homeStyle.homeButton]}
             onPress={() => navigation.navigate("Gameboard")}
           >
-            <Text style={[homeStyle.homeButtonText, { fontSize: fontSize }]}>
+            <Text style={[homeStyle.homeButtonText, { fontSize: buttonSize }]}>
               PLAY
             </Text>
           </Pressable>
@@ -109,59 +107,61 @@ const Home = ({
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.headerStyle}>
-        <Header />
-      </View>
-      <View style={styles.centeredContainer}>
-        {!buttonPressed ? (
-          <View>
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+    >
+      <View style={styles.container}>
+        <View style={styles.headerStyle}>
+          <Header />
+        </View>
+        <View style={[styles.centeredContainer]}>
+          {!buttonPressed ? (
+            <View>
+              <View>
+                <Ionicons
+                  name="information-circle"
+                  style={[styles.icon, { fontSize: iconSize }]}
+                />
+                <Text style={{ ...homeStyle.textHome, fontSize: fontSize }}>
+                  For scoreboard enter your name ...
+                </Text>
+                <TextInput
+                  style={[homeStyle.homeTextInput, { fontSize: fontSize }]}
+                  value={name}
+                  onChangeText={setName}
+                  placeholder="name"
+                  clearButtonMode={"always"}
+                  keyboardType={"default"}
+                  placeholderTextColor={"lightgrey"}
+                  ref={textInputRef}
+                />
+              </View>
+              <View style={styles.innerContainer}>
+                <Pressable style={[homeStyle.homeButton]} onPress={showRules}>
+                  <Text
+                    style={[homeStyle.homeButtonText, { fontSize: buttonSize }]}
+                  >
+                    OK
+                  </Text>
+                </Pressable>
+              </View>
+            </View>
+          ) : (
             <View>
               <Ionicons
                 name="information-circle"
                 style={[styles.icon, { fontSize: iconSize }]}
               />
-              <Text style={{ ...homeStyle.textHome, fontSize: fontSize }}>
-                For scoreboard enter your name ...
-              </Text>
-              <TextInput
-                style={[homeStyle.homeTextInput, { fontSize: fontSize }]}
-                value={name}
-                onChangeText={setName}
-                placeholder="name"
-                clearButtonMode={"always"}
-                keyboardType={"default"}
-                placeholderTextColor={"lightgrey"}
-                ref={textInputRef}
-              />
+              {rules()}
             </View>
-            <View style={styles.innerContainer}>
-              <Pressable
-                style={[homeStyle.homeButton, { padding: fontSize }]}
-                onPress={showRules}
-              >
-                <Text
-                  style={[homeStyle.homeButtonText, { fontSize: fontSize }]}
-                >
-                  OK
-                </Text>
-              </Pressable>
-            </View>
-          </View>
-        ) : (
-          <View>
-            <Ionicons
-              name="information-circle"
-              style={[styles.icon, { fontSize: iconSize }]}
-            />
-            {rules()}
-          </View>
-        )}
+          )}
+        </View>
+        <View style={styles.footer}>
+          <Footer />
+        </View>
       </View>
-      <View style={styles.footer}>
-        <Footer />
-      </View>
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 

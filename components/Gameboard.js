@@ -1,13 +1,8 @@
 import { useEffect, useState } from "react";
-import {
-  Text,
-  View,
-  ScrollView,
-  Pressable,
-  useWindowDimensions,
-} from "react-native";
+import { Text, View, Pressable, useWindowDimensions } from "react-native";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { Platform } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import styles from "../style/generalStyle";
 import Header from "./Header";
@@ -30,7 +25,6 @@ const Gameboard = ({
 }) => {
   const [throwDicesPressed, setThrowDicesPressed] = useState(false);
   const [nbrOfThrowsLeft, setNbrOfThrowsLeft] = useState(NBR_OF_THROWS);
-  // const [sum, setSum] = useState(0);
   const [message, setMessage] = useState("");
   const [sum, setSum] = useState(0);
   const [board, setBoard] = useState(new Array(NBR_OF_DICES).fill(""));
@@ -45,15 +39,16 @@ const Gameboard = ({
   // Adjust icon size based on screen width
   let iconSize;
   if (windowWidth > 600 && windowHeight > 600) {
-    // Large screen, such as iPad
-    iconSize = 70; // Adjust the size as needed
+    // Large screen (iPad)
+    iconSize = 70;
   } else {
-    // Small screen, such as phones
-    iconSize = 50; // Default size fo
+    // Small screen (Phone)
+    iconSize = 50;
   }
 
   // Adjust font size based on screen width
-  const fontSize = windowWidth < 600 ? 11 : 16;
+  const fontSize = windowWidth < 600 ? 12 : 18;
+  const buttonSize = windowWidth < 600 ? 14 : 18;
 
   // Scoreboard
 
@@ -69,8 +64,8 @@ const Gameboard = ({
       scoreboard.push(newScore);
 
       // Sort and save the scoreboard to AsyncStorage
-      scoreboard.sort((a, b) => b.score - a.score); // Sort in descending order
-      scoreboard = scoreboard.slice(0, 7); // Keep only top 7 scores
+      scoreboard.sort((a, b) => b.score - a.score);
+      scoreboard = scoreboard.slice(0, 7);
       await AsyncStorage.setItem("scores", JSON.stringify(scoreboard));
     } catch (error) {
       console.error("Error saving score:", error);
@@ -92,24 +87,18 @@ const Gameboard = ({
       hour: "2-digit",
       minute: "2-digit",
     };
-    return new Intl.DateTimeFormat("en", options).format(date);
+    const formattedDate = new Intl.DateTimeFormat("en-GB", options).format(
+      date
+    );
+    return formattedDate.replace(/\//g, ".");
   };
 
   // Dices
 
-  function getDiceColor(i) {
-    if (board.every((val, i, arr) => val === arr[0])) {
-      return selectedDices[i] ? "pink" : "purple"; // not sure if I even need it?
-    } else {
-      return selectedDices[i] ? "white" : "grey";
-    }
-  }
-
-  // keeping the dices, which were selected by the user and just leave the unselected dices for the next throw
   const selectDice = (i) => {
     if (selectDicePos) {
       let dices = [...selectedDices];
-      dices[i] = !selectedDices[i]; // ? false : true;
+      dices[i] = selectedDices[i] ? false : true;
       setSelectedDices(dices);
     } else setMessage("You have to throw dices first");
   };
@@ -123,20 +112,22 @@ const Gameboard = ({
           name={board[i]}
           key={"row" + i}
           size={iconSize}
-          color={getDiceColor(i)}
+          color={selectedDices[i] ? "white" : "grey"}
         ></MaterialCommunityIcons>
       </Pressable>
     );
   }
 
-  // numbers
+  // Numbers
 
-  //Initialize Numbers
+  //initiate Numbers
   const nbrRow = [];
   for (let i = 0; i < 6; i++) {
     nbrRow.push(
       <View key={"nbrRow" + i}>
-        <Text style={gameboardStyle.nbrSum}>{sumOfNbrs[i]}</Text>
+        <Text style={[gameboardStyle.nbrSum, { fontSize: fontSize }]}>
+          {sumOfNbrs[i]}
+        </Text>
         <Pressable key={"nbrRow" + i} onPress={() => useNbr(i)}>
           <MaterialCommunityIcons
             name={"numeric-" + (i + 1) + "-circle"}
@@ -160,14 +151,13 @@ const Gameboard = ({
         setUsedNbrs(nbrs);
         var tempSum = 0;
         for (let x = 0; x < row.length; x++) {
-          var diceVal = parseInt(board[x].match(/(\d+)/)[0]); //Extract the dice value from the board array (Alternatively a second array could have been created.)
+          var diceVal = parseInt(board[x].match(/(\d+)/)[0]);
           if (diceVal - 1 === i) {
             tempSum += diceVal;
           }
         }
         sumOfNbrs[i] = tempSum;
         setSum(sum + parseInt(tempSum));
-        //Reset variables for next game moves
         setSelectedDices(new Array(NBR_OF_DICES).fill(false));
         setNbrOfThrowsLeft(3);
       } else if (nbrs[i]) {
@@ -178,7 +168,6 @@ const Gameboard = ({
 
   // Play the game
 
-  //initiate throw of numbers and random result of dice numbers
   const throwDices = () => {
     let sum = 0;
     let newBoard = [...board];
@@ -192,7 +181,6 @@ const Gameboard = ({
       }
       setBoard(newBoard);
       setNbrOfThrowsLeft(nbrOfThrowsLeft - 1);
-      // setSum(sum);     warum brauche ich das? Macht hier gar keinen Sinn oder?
       setThrowDicesPressed(true);
     } else if (gameOver) {
       newGame();
@@ -271,16 +259,29 @@ const Gameboard = ({
           ) : (
             <View style={gameboardStyle.flex}>{row}</View>
           )}
-          <Text style={{ ...gameboardStyle.textGameboard, fontSize: fontSize }}>
+          <Text
+            style={{
+              ...gameboardStyle.textGameboard,
+              fontSize: fontSize,
+            }}
+          >
             Throws left: {nbrOfThrowsLeft}
           </Text>
-          <Text style={{ ...gameboardStyle.textGameboard, fontSize: fontSize }}>
+          <Text
+            style={{
+              ...gameboardStyle.textGameboard,
+              fontSize: fontSize,
+            }}
+          >
             {message}
           </Text>
         </View>
         <View style={[styles.innerContainer]}>
           <Pressable
-            style={{ ...gameboardStyle.gameboardButton, padding: fontSize }}
+            style={{
+              ...gameboardStyle.gameboardButton,
+              fontSize: buttonSize,
+            }}
             onPress={() => throwDices()}
           >
             <Text
@@ -292,16 +293,31 @@ const Gameboard = ({
               {gameOver ? "NEW GAME" : "THROW DICES"}
             </Text>
           </Pressable>
-          <Text style={{ ...gameboardStyle.textGameboard, fontSize: fontSize }}>
+          <Text
+            style={{
+              ...gameboardStyle.textGameboard,
+              fontSize: fontSize,
+            }}
+          >
             Total: {getBonus ? sum + BONUS_POINTS : sum}
           </Text>
-          <Text style={{ ...gameboardStyle.textGameboard, fontSize: fontSize }}>
+          <Text
+            style={{
+              ...gameboardStyle.textGameboard,
+              fontSize: fontSize,
+            }}
+          >
             {checkBonus()}
           </Text>
           <View style={[gameboardStyle.flex, { fontSize: fontSize }]}>
             {nbrRow}
           </View>
-          <Text style={{ ...gameboardStyle.textGameboard, fontSize: fontSize }}>
+          <Text
+            style={{
+              ...gameboardStyle.textGameboard,
+              fontSize: fontSize,
+            }}
+          >
             Player: {name}
           </Text>
         </View>

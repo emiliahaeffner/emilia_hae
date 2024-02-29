@@ -5,10 +5,9 @@ const windowWidth = Dimensions.get("window").width;
 const homeStyle = StyleSheet.create({
   textHome: {
     color: "white",
-    fontsize: 25,
     paddingBottom: 10,
     textAlign: "center",
-    fontFamily: "Verdana",
+    fontFamily: "Roboto",
   },
   homeButton: {
     margin: windowWidth * 0.03,
@@ -21,43 +20,40 @@ const homeStyle = StyleSheet.create({
     alignItems: "center",
   },
   homeButtonText: {
-    fontSize: 15,
     color: "white",
     fontWeight: "bold",
-    fontFamily: "Gill Sans",
+    fontFamily: "Roboto",
   },
   homeTextInput: {
+    width: "80%",
+    alignSelf: "center",
     textAlign: "center",
     backgroundColor: "#000000",
     color: "white",
-    fontSize: 14,
     padding: 7,
-    fontFamily: "Verdana",
+    fontFamily: "Roboto",
   },
   // Home - Rules
   rulesHeader: {
     textAlign: "center",
-    fontSize: 20,
     fontWeight: "bold",
     paddingBottom: 25,
     color: "white",
-    fontFamily: "Verdana",
+    fontFamily: "Roboto",
   },
   rulesText: {
     textAlign: "center",
-    fontSize: 16,
     paddingLeft: 25,
     paddingRight: 25,
     marginBottom: 5,
     color: "white",
-    fontFamily: "Verdana",
+    fontFamily: "Roboto",
   },
   playerText: {
-    fontSize: 16,
     textAlign: "center",
     padding: 20,
     color: "white",
-    fontFamily: "Verdana",
+    fontFamily: "Roboto",
   },
 });
 

@@ -26,7 +26,6 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   icon: {
-    fontSize: 57,
     color: "white",
     textAlign: "center",
     paddingBottom: 15,
@@ -42,10 +41,8 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontWeight: "bold",
     flex: 1,
-    fontSize: 20,
     textAlign: "center",
     marginTop: 17,
-    fontFamily: "Gill Sans",
   },
   // Footer style
   footer: {
@@ -58,10 +55,8 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontWeight: "bold",
     flex: 1,
-    fontSize: 15,
     textAlign: "center",
     marginTop: 17,
-    fontFamily: "Gill Sans",
   },
 });
 

@@ -1,7 +1,10 @@
 import * as React from "react";
-import { DataTable } from "react-native-paper";
+import {
+  Provider as PaperProvider,
+  DataTable,
+  DefaultTheme,
+} from "react-native-paper";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-// import { Column as Col, Row } from "react-native-flexbox-grid";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import {
   Text,
@@ -10,6 +13,7 @@ import {
   View,
   useWindowDimensions,
 } from "react-native";
+// import { Provider as PaperProvider, DefaultTheme } from 'react-native-paper';
 import { useState } from "react";
 import { useFocusEffect } from "@react-navigation/native";
 import styles from "../style/generalStyle";
@@ -24,25 +28,21 @@ const Scoreboard = () => {
   // Adjust icon size based on screen width
   let iconSize;
   if (windowWidth > 600 && windowHeight > 600) {
-    // Large screen, such as iPad
-    iconSize = 70; // Adjust the size as needed
+    // Large screen (iPad)
+    iconSize = 70;
   } else {
-    // Small screen, such as phones
-    iconSize = 50; // Default size fo
+    // Small screen(phone)
+    iconSize = 50;
   }
 
   // Adjust font size based on screen width
-  const fontSize = windowWidth < 600 ? 11 : 16;
+  const fontSize = windowWidth < 600 ? 12 : 18;
   const headerSize = windowWidth < 600 ? 20 : 30;
+  const buttonSize = windowWidth < 600 ? 14 : 18;
 
   useFocusEffect(
-    // TODO: Get scoreboard from storage
-    // Save scoreboard to a varialbe "scoreboard"
-
     React.useCallback(() => {
       getScoreboard();
-
-      //setScoreboard(scoreboard);
     }, [])
   );
 
@@ -67,7 +67,7 @@ const Scoreboard = () => {
     }
   };
 
-  // Function to calculate rank based on score
+  // Score rank calculation
   const calculateRank = () => {
     const sortedScores = [...scoreboard].sort((a, b) => b.score - a.score);
     return sortedScores.map((score, index) => ({
@@ -93,11 +93,13 @@ const Scoreboard = () => {
           <Text
             style={[scoreboardStyle.scoreboardHeader, { fontSize: headerSize }]}
           >
-            Top Three
+            Top Five
           </Text>
         </View>
         {scoreboard.length === 0 ? (
-          <Text style={{ ...styles.textGameboard, fontSize: fontSize }}>
+          <Text
+            style={{ ...scoreboardStyle.textScoreboard, fontSize: fontSize }}
+          >
             Scoreboard is empty
           </Text>
         ) : (
@@ -106,36 +108,39 @@ const Scoreboard = () => {
               <DataTable.Header style={scoreboardStyle.headerScoreboard}>
                 <DataTable.Title style={{ flex: 0.75 }}>Rank</DataTable.Title>
                 <DataTable.Title style={{ flex: 1.25 }}>Name</DataTable.Title>
-                <DataTable.Title style={{ flex: 1.5 }}>
+                <DataTable.Title style={{ flex: 1.75 }}>
                   Date & Time
                 </DataTable.Title>
                 <DataTable.Title numeric style={{ flex: 0.75 }}>
                   Score
                 </DataTable.Title>
               </DataTable.Header>
-              {rankedScoreboard.slice(0, 3).map((score, index) => (
-                <DataTable.Row
-                  key={index}
-                  style={scoreboardStyle.headerScoreboard}
-                >
-                  <DataTable.Cell style={{ flex: 0.75 }}>
-                    {score.rank}.
-                  </DataTable.Cell>
-                  <DataTable.Cell style={{ flex: 1.25 }}>
-                    {score.name}
-                  </DataTable.Cell>
-                  <DataTable.Cell style={{ flex: 1.5 }}>
-                    {score.date}
-                  </DataTable.Cell>
-                  <DataTable.Cell numeric style={{ flex: 0.75 }}>
-                    {score.score}
-                  </DataTable.Cell>
-                </DataTable.Row>
-              ))}
+
+              <ScrollView>
+                {rankedScoreboard.slice(0, 5).map((score, index) => (
+                  <DataTable.Row
+                    key={index}
+                    style={scoreboardStyle.headerScoreboard}
+                  >
+                    <DataTable.Cell style={{ flex: 0.75 }}>
+                      {score.rank}.
+                    </DataTable.Cell>
+                    <DataTable.Cell style={{ flex: 1.25 }}>
+                      {score.name}
+                    </DataTable.Cell>
+                    <DataTable.Cell style={{ flex: 1.75 }}>
+                      {score.date}
+                    </DataTable.Cell>
+                    <DataTable.Cell numeric style={{ flex: 0.75 }}>
+                      {score.score}
+                    </DataTable.Cell>
+                  </DataTable.Row>
+                ))}
+              </ScrollView>
             </DataTable>
             <Pressable
               onPress={clearScoreboard}
-              style={[scoreboardStyle.clearButton, { padding: fontSize }]}
+              style={[scoreboardStyle.clearButton, { fontSize: buttonSize }]}
             >
               <Text
                 style={{
