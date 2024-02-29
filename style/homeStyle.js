@@ -25,10 +25,7 @@ const homeStyle = StyleSheet.create({
     fontFamily: "Roboto",
   },
   homeTextInput: {
-    width: "80%",
-    alignSelf: "center",
     textAlign: "center",
-    backgroundColor: "#000000",
     color: "white",
     padding: 7,
     fontFamily: "Roboto",

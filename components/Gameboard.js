@@ -9,6 +9,7 @@ import Header from "./Header";
 import Footer from "./Footer";
 import gameboardStyle from "../style/gameboardStyle";
 
+let board = [];
 let sumOfNbrs = [0, 0, 0, 0, 0, 0];
 let selectNbrPos = false;
 let selectDicePos = false;
@@ -23,11 +24,9 @@ const Gameboard = ({
   BONUS_POINTS,
   BONUS_POINTS_LIMIT,
 }) => {
-  const [throwDicesPressed, setThrowDicesPressed] = useState(false);
   const [nbrOfThrowsLeft, setNbrOfThrowsLeft] = useState(NBR_OF_THROWS);
   const [message, setMessage] = useState("");
   const [sum, setSum] = useState(0);
-  const [board, setBoard] = useState(new Array(NBR_OF_DICES).fill(""));
   const [selectedDices, setSelectedDices] = useState(
     new Array(NBR_OF_DICES).fill(false)
   );
@@ -168,24 +167,19 @@ const Gameboard = ({
 
   // Play the game
 
-  const throwDices = () => {
-    let sum = 0;
-    let newBoard = [...board];
+  function throwDices() {
     if (posThrow && !gameOver) {
       for (let i = 0; i < NBR_OF_DICES; i++) {
         if (!selectedDices[i]) {
           let randomNumber = Math.floor(Math.random() * 6 + 1);
-          newBoard[i] = "dice-" + randomNumber;
-          sum += randomNumber;
+          board[i] = "dice-" + randomNumber;
         }
       }
-      setBoard(newBoard);
       setNbrOfThrowsLeft(nbrOfThrowsLeft - 1);
-      setThrowDicesPressed(true);
     } else if (gameOver) {
       newGame();
     }
-  };
+  }
 
   function checkBonus() {
     if (sum >= BONUS_POINTS_LIMIT) {

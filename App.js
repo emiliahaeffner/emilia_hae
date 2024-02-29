@@ -68,6 +68,7 @@ export default function App({}) {
 
             tabBarActiveTintColor: "purple",
             tabBarInactiveTintColor: "white",
+            headerTitleAlign: "center",
           })}
         >
           <Tab.Screen

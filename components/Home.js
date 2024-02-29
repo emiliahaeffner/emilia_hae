@@ -127,11 +127,10 @@ const Home = ({
                   For scoreboard enter your name ...
                 </Text>
                 <TextInput
-                  style={[homeStyle.homeTextInput, { fontSize: fontSize }]}
+                  style={homeStyle.homeTextInput}
                   value={name}
                   onChangeText={setName}
                   placeholder="name"
-                  clearButtonMode={"always"}
                   keyboardType={"default"}
                   placeholderTextColor={"lightgrey"}
                   ref={textInputRef}
