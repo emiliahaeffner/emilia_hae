@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { Text, View, Pressable, useWindowDimensions } from "react-native";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { Platform } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import styles from "../style/generalStyle";
 import Header from "./Header";
@@ -35,7 +34,8 @@ const Gameboard = ({
   const windowWidth = useWindowDimensions().width;
   const windowHeight = useWindowDimensions().height;
 
-  // Adjust icon size based on screen width
+  // Adjust icon and fonts to the screen size
+
   let iconSize;
   if (windowWidth > 600 && windowHeight > 600) {
     // Large screen (iPad)
@@ -45,11 +45,8 @@ const Gameboard = ({
     iconSize = 50;
   }
 
-  // Adjust font size based on screen width
   const fontSize = windowWidth < 600 ? 12 : 18;
   const buttonSize = windowWidth < 600 ? 14 : 18;
-
-  // Scoreboard
 
   // Function to add new score to scoreboard
   const addNewScore = async ({ name, score, date }) => {
@@ -64,13 +61,14 @@ const Gameboard = ({
 
       // Sort and save the scoreboard to AsyncStorage
       scoreboard.sort((a, b) => b.score - a.score);
-      scoreboard = scoreboard.slice(0, 7);
+      scoreboard = scoreboard.slice(0, 5);
       await AsyncStorage.setItem("scores", JSON.stringify(scoreboard));
     } catch (error) {
       console.error("Error saving score:", error);
     }
   };
 
+  // add the bonus, if player gets bonus & get the current time / date of the game
   const handleEndGame = (name) => {
     const score = getBonus ? sum + BONUS_POINTS : sum;
     const currentDate = new Date();
@@ -78,6 +76,7 @@ const Gameboard = ({
     addNewScore({ name, score, date: formattedDate });
   };
 
+  // put the date into the right format
   const formatDate = (date) => {
     const options = {
       day: "2-digit",
@@ -94,6 +93,7 @@ const Gameboard = ({
 
   // Dices
 
+  // Check if throwing dices is possible and "check" the selected dices
   const selectDice = (i) => {
     if (selectDicePos) {
       let dices = [...selectedDices];
@@ -102,7 +102,7 @@ const Gameboard = ({
     } else setMessage("You have to throw dices first");
   };
 
-  //initiate the dices
+  // Initiate the dices and the color they get when selected
   const row = [];
   for (let i = 0; i < NBR_OF_DICES; i++) {
     row.push(
@@ -119,7 +119,7 @@ const Gameboard = ({
 
   // Numbers
 
-  //initiate Numbers
+  //initiate Numbers and the color they get when selected
   const nbrRow = [];
   for (let i = 0; i < 6; i++) {
     nbrRow.push(
@@ -139,7 +139,7 @@ const Gameboard = ({
     );
   }
 
-  //Use number
+  //Use of numbers plus "rules" when user doesn't play according to the rules
   function useNbr(i) {
     if (posThrow && !gameOver) {
       setMessage("Throw 3 times before setting points.");
@@ -167,6 +167,7 @@ const Gameboard = ({
 
   // Play the game
 
+  // Throw dices and generate random numbers & when game is over the possibility to start a new game
   function throwDices() {
     if (posThrow && !gameOver) {
       for (let i = 0; i < NBR_OF_DICES; i++) {
@@ -181,6 +182,7 @@ const Gameboard = ({
     }
   }
 
+  // Message when player receives the bonus or not - then just display the sum of points
   function checkBonus() {
     if (sum >= BONUS_POINTS_LIMIT) {
       getBonus = true;
@@ -192,6 +194,7 @@ const Gameboard = ({
     }
   }
 
+  // rules which have to be followed to not cheat the game
   useEffect(() => {
     if (nbrOfThrowsLeft === 0 && !gameOver) {
       setMessage("Select your points before next throw.");
@@ -224,6 +227,7 @@ const Gameboard = ({
     }
   }, [nbrOfThrowsLeft]);
 
+  // setting everything back to initial state to start a new game
   function newGame() {
     gameOver = false;
     setSum(0);
@@ -243,6 +247,7 @@ const Gameboard = ({
       </View>
       <View style={styles.centeredContainer}>
         <View>
+          {/* When player has 3 throws to prevent cheating there is a dice icon displayed so player can't select dice from previous throw again */}
           {nbrOfThrowsLeft == 3 ? (
             <View>
               <Ionicons

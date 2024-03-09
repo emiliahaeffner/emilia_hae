@@ -1,11 +1,6 @@
 import { Text, View, useWindowDimensions } from "react-native";
 import styles from "../style/generalStyle";
 import { Platform } from "react-native";
-// import {
-//   useFonts,
-//   Montserrat_400Regular,
-//   Montserrat_700Bold,
-// } from "@expo-google-fonts/montserrat";
 
 export default Header = () => {
   const windowWidth = useWindowDimensions().width;

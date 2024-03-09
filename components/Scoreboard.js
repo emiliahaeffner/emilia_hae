@@ -1,9 +1,5 @@
 import * as React from "react";
-import {
-  Provider as PaperProvider,
-  DataTable,
-  DefaultTheme,
-} from "react-native-paper";
+import { Provider as PaperProvider, DataTable } from "react-native-paper";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import {
@@ -13,7 +9,6 @@ import {
   View,
   useWindowDimensions,
 } from "react-native";
-// import { Provider as PaperProvider, DefaultTheme } from 'react-native-paper';
 import { useState } from "react";
 import { useFocusEffect } from "@react-navigation/native";
 import styles from "../style/generalStyle";
@@ -46,6 +41,7 @@ const Scoreboard = () => {
     }, [])
   );
 
+  // Getting the data of the Gameboard from the async storage
   const getScoreboard = async () => {
     try {
       const scores = await AsyncStorage.getItem("scores");
@@ -58,6 +54,7 @@ const Scoreboard = () => {
     }
   };
 
+  // Clearing the Scoreboard entries
   const clearScoreboard = async () => {
     try {
       await AsyncStorage.removeItem("scores");
@@ -67,7 +64,7 @@ const Scoreboard = () => {
     }
   };
 
-  // Score rank calculation
+  // Score rank calculation / sorting based on the score
   const calculateRank = () => {
     const sortedScores = [...scoreboard].sort((a, b) => b.score - a.score);
     return sortedScores.map((score, index) => ({
@@ -96,6 +93,7 @@ const Scoreboard = () => {
             Top Five
           </Text>
         </View>
+        {/* When there are no entries in the Scoreboard the message is displayed, otherwise the DataTable gets displayed with the rank */}
         {scoreboard.length === 0 ? (
           <Text
             style={{ ...scoreboardStyle.textScoreboard, fontSize: fontSize }}

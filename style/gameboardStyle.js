@@ -3,7 +3,6 @@ import { StyleSheet, Dimensions } from "react-native";
 const windowWidth = Dimensions.get("window").width;
 
 const gameboardStyle = StyleSheet.create({
-  // Gameboard
   flex: {
     flexDirection: "row",
     justifyContent: "center",

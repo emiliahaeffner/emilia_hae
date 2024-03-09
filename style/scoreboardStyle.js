@@ -3,7 +3,6 @@ import { StyleSheet, Dimensions } from "react-native";
 const windowWidth = Dimensions.get("window").width;
 
 const scoreboardStyle = StyleSheet.create({
-  //Scoreboard
   scoreboardHeader: {
     textAlign: "center",
     fontWeight: "bold",

@@ -3,7 +3,6 @@ import { View, useWindowDimensions } from "react-native";
 import React, { useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
 import "react-native-gesture-handler";
 import Gameboard from "./components/Gameboard";
@@ -52,6 +51,7 @@ export default function App({}) {
             tabBarIcon: ({ focused, color, size }) => {
               let iconName;
 
+              // initialize the (not) focused Tab Navigation icons
               if (route.name === "Home") {
                 iconName = focused
                   ? "information-circle"
@@ -66,6 +66,7 @@ export default function App({}) {
 
             display: "flex",
 
+            // Do some styling for the Navigation
             tabBarActiveTintColor: "purple",
             tabBarInactiveTintColor: "white",
             headerTitleAlign: "center",
@@ -76,7 +77,6 @@ export default function App({}) {
             options={{
               tabBarStyle: { display: "none" },
               headerTintColor: "white",
-              // alignSelf: "center" for Android?
             }}
           >
             {(props) => (

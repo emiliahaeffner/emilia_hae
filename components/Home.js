@@ -28,6 +28,8 @@ const Home = ({
   const windowWidth = Dimensions.get("window").width;
   const windowHeight = Dimensions.get("window").height;
 
+  // Adjust icon and fonts to the screen size
+
   let iconSize;
   if (windowWidth > 600 && windowHeight > 600) {
     // Large screen (iPad)
@@ -51,6 +53,7 @@ const Home = ({
 
   const textInputRef = React.createRef();
 
+  // When the button is pressed it checks if the name entry is empty and then continue to switch to the next page (rules)
   const showRules = () => {
     if (!name.trim()) {
       alert("Name entry is empty");
@@ -59,6 +62,7 @@ const Home = ({
     }
   };
 
+  // Displaying the rules after the button is pressed
   const rules = () => {
     return (
       <View>
@@ -112,10 +116,12 @@ const Home = ({
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
       <View style={styles.container}>
+        {/* Display Header */}
         <View style={styles.headerStyle}>
           <Header />
         </View>
         <View style={[styles.centeredContainer]}>
+          {/* checking if the button is pressed and either display the name entry screen or the rules screen */}
           {!buttonPressed ? (
             <View>
               <View>
@@ -134,6 +140,7 @@ const Home = ({
                   keyboardType={"default"}
                   placeholderTextColor={"lightgrey"}
                   ref={textInputRef}
+                  autoFocus={true}
                 />
               </View>
               <View style={styles.innerContainer}>

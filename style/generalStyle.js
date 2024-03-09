@@ -4,10 +4,8 @@ const windowWidth = Dimensions.get("window").width;
 
 const styles = StyleSheet.create({
   container: {
-    //display: "flex",
     flex: 1,
     backgroundColor: "#000000",
-    //justifyContent: "space-between",
   },
   navigation: {
     padding: 5,
@@ -19,7 +17,6 @@ const styles = StyleSheet.create({
   centeredContainer: {
     flexGrow: 1,
     alignItems: "center",
-    //display: "flex",
     justifyContent: "center",
   },
   content: {
